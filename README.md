@@ -57,12 +57,12 @@ src/
 
 ## 📌 Example
 Menu:
-
+```
 1.Add User
 2.Add Expense
 3.Show Balances
 4.Show Settlement
-
+```
 ---
 
 ## 🔮 Future Improvements
