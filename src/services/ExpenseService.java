@@ -1,33 +1,55 @@
-package models;
+package services;
 
+import models.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Expense {
-    private User paidBy;
-    private double amount;
-    private String splitType;  // EQUAL, EXACT, PERCENTAGE
-    private List<Split> splits;
+public class ExpenseService {
 
-    public Expense(User paidBy, double amount, String splitType, List<Split> splits) {
-        this.paidBy = paidBy;
-        this.amount = amount;
-        this.splitType = splitType;
-        this.splits = splits;
+    public Expense createEqualExpense(User paidBy, double amount, List<User> users) {
+        double splitAmount = amount / users.size();
+        List<Split> splits = new ArrayList<>();
+
+        for (User user : users) {
+            splits.add(new Split(user, splitAmount));
+        }
+
+        return new Expense(paidBy, amount, "EQUAL", splits);
     }
 
-    public User getPaidBy() {
-        return paidBy;
+    public Expense createExactExpense(User paidBy, double amount, List<Double> exactAmounts, List<User> users) {
+
+        double total = 0;
+        for (double val : exactAmounts) total += val;
+
+        if (total != amount) {
+            throw new IllegalArgumentException("Exact split amounts do not match total amount!");
+        }
+
+        List<Split> splits = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            splits.add(new Split(users.get(i), exactAmounts.get(i)));
+        }
+
+        return new Expense(paidBy, amount, "EXACT", splits);
     }
 
-    public double getAmount() {
-        return amount;
-    }
+    public Expense createPercentageExpense(User paidBy, double amount, List<Double> percentages, List<User> users) {
 
-    public String getSplitType() {
-        return splitType;
-    }
+        double total = 0;
+        for (double p : percentages) total += p;
 
-    public List<Split> getSplits() {
-        return splits;
+        if (total != 100) {
+            throw new IllegalArgumentException("Percentages must add up to 100!");
+        }
+
+        List<Split> splits = new ArrayList<>();
+
+        for (int i = 0; i < users.size(); i++) {
+            double splitAmount = (amount * percentages.get(i)) / 100.0;
+            splits.add(new Split(users.get(i), splitAmount));
+        }
+
+        return new Expense(paidBy, amount, "PERCENTAGE", splits);
     }
 }
