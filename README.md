@@ -30,17 +30,19 @@ This project helps users split expenses like Splitwise and track who owes whom.
 
 ## 📂 Project Structure
 
+```
 src/
 ├── Main.java
 ├── models/
-│ ├── User.java
-│ ├── Expense.java
-│ ├── Split.java
-│ └── Group.java
+│   ├── User.java
+│   ├── Expense.java
+│   ├── Split.java
+│   └── Group.java
 ├── services/
-│ └── ExpenseService.java
+│   └── ExpenseService.java
 └── utils/
-└── InputHelper.java
+    └── InputHelper.java
+```
 
 
 
